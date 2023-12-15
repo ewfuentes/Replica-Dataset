@@ -2,6 +2,7 @@
 #include "EGL.h"
 #include "Assert.h"
 
+#include <X11/Xlib.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GL/glew.h>
