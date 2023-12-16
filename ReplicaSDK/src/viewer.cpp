@@ -132,7 +132,6 @@ int main(int argc, char* argv[]) {
 
   ASSERT(std::filesystem::exists(mesh_file));
   ASSERT(std::filesystem::exists(atlas_folder));
-  ASSERT(std::filesystem::exists(surface_file));
 
   const int uiWidth = 180;
   const int width = 1280;
@@ -188,14 +187,16 @@ int main(int argc, char* argv[]) {
 
   // load mirrors
   std::vector<MirrorSurface> mirrors;
-  std::ifstream file(surface_file);
-  picojson::value json;
-  picojson::parse(json, file);
+  if (std::filesystem::exists(surface_file)) {
+    std::ifstream file(surface_file);
+    picojson::value json;
+    picojson::parse(json, file);
 
-  for (size_t i = 0; i < json.size(); i++) {
-    mirrors.emplace_back(json[i]);
+    for (size_t i = 0; i < json.size(); i++) {
+      mirrors.emplace_back(json[i]);
+    }
+    std::cout << "Loaded " << mirrors.size() << " mirrors" << std::endl;
   }
-  std::cout << "Loaded " << mirrors.size() << " mirrors" << std::endl;
 
   const std::string shadir = STR(SHADER_DIR);
   MirrorRenderer mirrorRenderer(mirrors, width, height, shadir);
